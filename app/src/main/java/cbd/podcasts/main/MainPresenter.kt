@@ -1,5 +1,7 @@
 package cbd.podcasts.main
 
+import cbd.podcasts.podcastRepo.PodcastStatus
+
 class MainPresenter(private val view: MainContract.MainView) : MainContract.MainPresenter {
 
     override fun init() {
@@ -9,5 +11,9 @@ class MainPresenter(private val view: MainContract.MainView) : MainContract.Main
 
     override fun shutdown() {
         view.release()
+    }
+
+    override fun podcastSelected(podcastStatus: PodcastStatus) {
+        view.playPodcast(podcastStatus)
     }
 }

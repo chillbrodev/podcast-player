@@ -2,6 +2,7 @@ package cbd.podcasts.main
 
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import cbd.podcasts.PodcatsApp
@@ -9,6 +10,7 @@ import cbd.podcasts.R
 import cbd.podcasts.media.MediaSourceCreator
 import cbd.podcasts.podcastRecyclerView.PodcastAdapter
 import cbd.podcasts.podcastRepo.PodcastRepo
+import cbd.podcasts.podcastRepo.PodcastStatus
 import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -30,15 +32,7 @@ class MainActivity : AppCompatActivity(), MainContract.MainView {
         userAgent = Util.getUserAgent(this, "Podcasts")
 
         podcastAdapter = PodcastAdapter(mutableListOf()) { podcastStatus ->
-            val mediaSource = MediaSourceCreator.createMediaSource(
-                podcastStatus.podcastUrl,
-                this,
-                userAgent
-            )
-
-            exoPlayer.prepare(mediaSource)
-
-            exoPlayer.playWhenReady = true
+            presenter.podcastSelected(podcastStatus)
         }
         rvPodcasts.adapter = podcastAdapter
         rvPodcasts.layoutManager = LinearLayoutManager(this)
@@ -53,6 +47,24 @@ class MainActivity : AppCompatActivity(), MainContract.MainView {
     override fun loadPodcasts() {
         val podcasts = PodcastRepo.fetchAllPodcasts(PodcatsApp.app.assets)
         podcastAdapter.updateData(podcasts)
+    }
+
+    override fun playPodcast(podcastStatus: PodcastStatus) {
+        Toast.makeText(
+            this,
+            "Now playing: ${podcastStatus.podcastTitle}",
+            Toast.LENGTH_LONG
+        ).show()
+
+        val mediaSource = MediaSourceCreator.createMediaSource(
+            podcastStatus.podcastUrl,
+            this,
+            userAgent
+        )
+
+        exoPlayer.prepare(mediaSource)
+
+        exoPlayer.playWhenReady = true
     }
 
     override fun release() = exoPlayer.release()
