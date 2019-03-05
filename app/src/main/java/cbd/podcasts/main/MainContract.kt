@@ -7,7 +7,7 @@ interface MainContract {
     interface MainView {
         fun initExoplayer()
         fun release()
-        fun loadPodcasts()
+        fun loadPodcasts(podcasts: List<PodcastStatus>)
         fun playPodcast(podcastStatus: PodcastStatus)
     }
 

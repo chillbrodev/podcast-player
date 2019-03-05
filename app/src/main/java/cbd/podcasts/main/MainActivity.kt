@@ -44,8 +44,7 @@ class MainActivity : AppCompatActivity(), MainContract.MainView {
         exoPlayer = ExoPlayerFactory.newSimpleInstance(this, rendersFactory, tracksSelector)
     }
 
-    override fun loadPodcasts() {
-        val podcasts = PodcastRepo.fetchAllPodcasts(PodcatsApp.app.assets)
+    override fun loadPodcasts(podcasts: List<PodcastStatus>) {
         podcastAdapter.updateData(podcasts)
     }
 
