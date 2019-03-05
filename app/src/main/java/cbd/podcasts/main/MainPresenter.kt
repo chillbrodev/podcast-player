@@ -4,6 +4,7 @@ class MainPresenter(private val view: MainContract.MainView) : MainContract.Main
 
     override fun init() {
         view.initExoplayer()
+        view.loadPodcasts()
     }
 
     override fun shutdown() {
